@@ -26,13 +26,13 @@ class tela:
 
     def botões(self):
         self.painel=PanedWindow(jan, bg="#636A72", bd=3, relief="sunken")
-        self.butão_I=Button(jan, text="butão", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px")#buttona é para butão lable é para texto
+        self.butão_I=Button(jan, text="butão", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px")#buttona é para butão lable é para texto
         
         self.butão_I.place(relx=0.05,y=75)
         self.painel.place(relx=0.02, rely=0.02, relheight=0.96, relwidth=0.96)
 
     def prencher(self):
-        self.textoI=Label(jan, text="IOUAE", state="disabled")
+        self.textoI=Label(jan, text="IOUAE", fg="red", bg="blue")
         self.escI=Entry(jan, width=20, show="-")
         self.escIT=Text(jan , height=4, width=45)
         
