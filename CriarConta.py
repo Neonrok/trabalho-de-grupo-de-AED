@@ -35,7 +35,7 @@ class tela:
 
     def botões(self):
         self.painel=PanedWindow(jan, bg="#636A72", bd=3, relief="sunken")
-        self.butão_I=Button(jan, text="SAVE", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px")#buttona é para butão lable é para texto
+        self.butão_I=Button(jan, text="SAVE", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px", relief="groove")#buttona é para butão lable é para texto
 
         self.butão_I.place(relx=0.05,y=160)
         self.painel.place(relx=0.02, rely=0.02, relheight=0.96, relwidth=0.96)
