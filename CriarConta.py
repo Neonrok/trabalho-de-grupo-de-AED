@@ -12,7 +12,16 @@ class tela:
     
     def tela(self):
         
-        self.jan.geometry("1000x650+25+25")
+        SW=jan.winfo_screenwidth()
+        SH=jan.winfo_screenheight()
+
+        AW=400
+        AH=450
+
+        x=(SW/2)-(AW/2)
+        y=(SH/2)-(AH/2)
+
+        self.jan.geometry(f'{AW}x{AH}+{int(x)}+{int(y)}')
 
         self.jan.title("criar")
 
