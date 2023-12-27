@@ -2,7 +2,13 @@ from tkinter import *
 
 jan= Tk()
 
-class tela:
+class ordens:
+    def saving(self):
+        self.save=self.nome
+        self.print(self.save)
+
+
+class tela(ordens):
     def __init__(self):
         self.jan = jan
         self.tela()
@@ -35,7 +41,7 @@ class tela:
 
     def botões(self):
         self.painel=PanedWindow(jan, bg="#636A72", bd=3, relief="sunken")
-        self.butão_I=Button(jan, text="SAVE", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px", relief="groove")#buttona é para butão lable é para texto
+        self.butão_I=Button(jan, text="SAVE", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px", relief="groove", command=self.saving)#buttona é para butão lable é para texto
 
         self.butão_I.place(relx=0.05,y=160)
         self.painel.place(relx=0.02, rely=0.02, relheight=0.96, relwidth=0.96)
@@ -50,5 +56,8 @@ class tela:
         self.Nome.place(relx=0.05, y=75)
         self.textoII.place(relx=0.05, y=110)
         self.Pass.place(relx=0.05, y=135)
+        
+
+
 
 tela()
