@@ -1,15 +1,19 @@
 from tkinter import *
 
-from CriarConta import criacao
+import subprocess
 
 
 jan= Tk()
 
 class Ordens:
     def criar(self):
-        criar_janela = criacao()
-        criar_janela.criar()
+        janTop = Toplevel(jan)
+        janTop.transient(jan)
+        janTop.grab_set()
         
+        subprocess.Popen(["python", "CriarConta.py"])
+        jan.wait_window(janTop)
+
 class tela(Ordens):
     def __init__(self):
         self.jan = jan
@@ -35,9 +39,9 @@ class tela(Ordens):
 
     def botões(self):
         self.painel=PanedWindow(jan, bg="#636A72", bd=3, relief="sunken")
-        self.butão_I=Button(jan, text="EXIT", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.criar) 
+        self.butão_I=Button(jan, text="Criar/Logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.criar) 
         
-        self.butão_I.place(relx=0.972,rely=0.02)
+        self.butão_I.place(relx=0.925,rely=0.05)
         self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
 
     def prencher(self):
