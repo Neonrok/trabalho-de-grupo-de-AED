@@ -1,8 +1,16 @@
 from tkinter import *
 
+from CriarConta import criacao
+
+
 jan= Tk()
 
-class tela:
+class Ordens:
+    def criar(self):
+        criar_janela = criacao()
+        criar_janela.criar()
+        
+class tela(Ordens):
     def __init__(self):
         self.jan = jan
         self.tela()
@@ -11,8 +19,8 @@ class tela:
         jan.mainloop()
     
     def tela(self):
-        
-        self.jan.geometry("1000x650+25+25")
+
+        self.jan.state("zoomed")
 
         self.jan.title("catacumba")
 
@@ -20,16 +28,17 @@ class tela:
 
         self.jan.configure(bg="#636A72")
 
-        self.jan.minsize(width=500, height=325)
+        SW=jan.winfo_screenwidth()
+        SH=jan.winfo_screenheight()
 
-        self.jan.maxsize(width=1650, height=950)
+        self.jan.minsize(width=SW, height=SH)
 
     def botões(self):
         self.painel=PanedWindow(jan, bg="#636A72", bd=3, relief="sunken")
-        self.butão_I=Button(jan, text="butão", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px")#buttona é para butão lable é para texto
+        self.butão_I=Button(jan, text="EXIT", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.criar) 
         
-        self.butão_I.place(relx=0.05,y=75)
-        self.painel.place(relx=0.02, rely=0.02, relheight=0.96, relwidth=0.96)
+        self.butão_I.place(relx=0.972,rely=0.02)
+        self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
 
     def prencher(self):
         self.textoI=Label(jan, text="IOUAE", fg="red", bg="blue")
