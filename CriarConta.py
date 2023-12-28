@@ -4,8 +4,8 @@ jan= Tk()
 
 class ordens:
     def saving(self):
-        self.save=self.nome
-        self.print(self.save)
+        save=self.Nome.get()
+        print(save)
 
 
 class tela(ordens):
