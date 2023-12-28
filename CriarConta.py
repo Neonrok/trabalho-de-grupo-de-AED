@@ -1,11 +1,27 @@
 from tkinter import *
+import os
 
 jan= Tk()
 
 class ordens:
     def saving(self):
         save=self.Nome.get()
-        print(save)
+        password=self.Pass.get()
+
+        self.escreva(save, password)
+
+    @staticmethod
+    def escreva(X,Y):  # write()
+        ficheiro = X
+        if os.path.isfile("./base/contas/{0}.txt".format(ficheiro)):
+            g = open("./base/contas/{0}.txt".format(ficheiro), "a")
+        else:
+            g = open("./base/contas/{0}.txt".format(ficheiro), "w")
+ 
+        escrita = Y
+ 
+        g.write(escrita)
+        g.close()
 
 
 class tela(ordens):
