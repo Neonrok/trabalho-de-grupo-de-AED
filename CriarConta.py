@@ -1,27 +1,38 @@
 from tkinter import *
+from tkinter import messagebox
 import os
 
 jan= Tk()
 
 class ordens:
     def saving(self):
-        save=self.Nome.get()
-        password=self.Pass.get()
+        save = self.Nome.get()
+        password = self.Pass.get()
 
         self.escreva(save, password)
 
     @staticmethod
-    def escreva(X,Y):  # write()
-        ficheiro = X
-        if os.path.isfile("./base/contas/{0}.txt".format(ficheiro)):
-            g = open("./base/contas/{0}.txt".format(ficheiro), "a")
+    def escreva(X, Y):
+        ficheiro = "./base/contas/{0}.txt".format(X)
+        if os.path.isfile(ficheiro):
+            with open(ficheiro, "r") as g:
+                ordens.entra(g,Y)
         else:
-            g = open("./base/contas/{0}.txt".format(ficheiro), "w")
- 
-        escrita = Y
- 
-        g.write(escrita)
-        g.close()
+            with open(ficheiro, "w") as g:
+                escrita = Y
+                g.write(escrita)
+
+    @staticmethod
+    def entra(g,Y):
+        pas = g.readline().strip()
+        Y = Y.strip()
+        if Y == pas:
+            messagebox.showinfo(title="^_^" ,message="bem vindo")
+        else:
+            messagebox.showwarning(title="erro" ,message="esse usuario existe mas a palavra pass está errada")
+        print(pas)
+        print(Y)
+
 
 
 class tela(ordens):
