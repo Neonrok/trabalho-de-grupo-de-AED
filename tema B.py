@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 import os
 
-user="Criar/Logar"
+user="-1"
 
 
 class TelaCriação(Toplevel):
@@ -111,8 +111,11 @@ class tela(tk.Tk):
     def botões(self):
         self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")
 
-        self.butão_I=Button(self, text=user, bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
-        
+        if user=="-1":
+            self.butão_I=Button(self, text="criar/logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
+        else:
+            self.butão_I=Label(self, text=user, bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px")
+
         self.butão_I.place(relx=0.925,rely=0.05)
         self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
 
