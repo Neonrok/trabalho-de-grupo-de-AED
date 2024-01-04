@@ -3,6 +3,9 @@ from tkinter import *
 from tkinter import messagebox
 import os
 
+user="Criar/Logar"
+
+
 class TelaCriação(Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
@@ -51,23 +54,28 @@ class TelaCriação(Toplevel):
 
         self.escreva(save, password)
 
-    @staticmethod
-    def escreva(X, Y):
+
+    def escreva(self, X, Y):
+        global user
+
         ficheiro = "./base/contas/{0}.txt".format(X)
         if os.path.isfile(ficheiro):
             with open(ficheiro, "r") as g:
-                TelaCriação.entra(g, Y)
+                self.entra(g, Y, X)
         else:
             with open(ficheiro, "w") as g:
                 escrita = Y
                 g.write(escrita)
 
-    @staticmethod
-    def entra(g, Y):
+
+    def entra(self, g, Y, X):
         pas = g.readline().strip()
         Y = Y.strip()
         if Y == pas:
+            global user
             messagebox.showinfo(title="^_^", message="bem-vindo")
+            user=X
+            self.destroy()
         else:
             messagebox.showwarning(title="erro", message="esse usuário existe, mas a palavra-passe está errada")
 
@@ -98,7 +106,8 @@ class tela(tk.Tk):
 
     def botões(self):
         self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")
-        self.butão_I=Button(self, text="Criar/Logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
+        
+        self.butão_I=Button(self, text=user, bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
         
         self.butão_I.place(relx=0.925,rely=0.05)
         self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
