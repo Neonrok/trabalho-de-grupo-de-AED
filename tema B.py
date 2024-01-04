@@ -66,6 +66,9 @@ class TelaCriação(Toplevel):
             with open(ficheiro, "w") as g:
                 escrita = Y
                 g.write(escrita)
+            user=X
+            print(user)
+            self.destroy()
 
 
     def entra(self, g, Y, X):
@@ -75,6 +78,7 @@ class TelaCriação(Toplevel):
             global user
             messagebox.showinfo(title="^_^", message="bem-vindo")
             user=X
+            print(user)
             self.destroy()
         else:
             messagebox.showwarning(title="erro", message="esse usuário existe, mas a palavra-passe está errada")
@@ -106,7 +110,7 @@ class tela(tk.Tk):
 
     def botões(self):
         self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")
-        
+
         self.butão_I=Button(self, text=user, bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
         
         self.butão_I.place(relx=0.925,rely=0.05)
