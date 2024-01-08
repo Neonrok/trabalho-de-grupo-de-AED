@@ -3,14 +3,14 @@ from tkinter import *
 from tkinter import messagebox
 import os
 
-user="-1"
+user="guest"
 
 
 class TelaCriação(Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
         self.tela()
-        self.botões()
+        self.utilizador()
         self.prencher()
 
     def tela(self):
@@ -30,7 +30,7 @@ class TelaCriação(Toplevel):
         self.minsize(width=400, height=450)
         self.maxsize(width=400, height=450)
 
-    def botões(self):
+    def utilizador(self):
         self.painel = PanedWindow(self, bg="#636A72", bd=3, relief="sunken")
         self.butão_I = Button(self, text="SAVE", bg="#636A72", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px", relief="groove", command=self.saving)
 
@@ -89,7 +89,7 @@ class tela(tk.Tk):
         super().__init__()
 
         self.tela()
-        self.botões()
+        self.utilizador()
         self.prencher()
         self.mainloop()
     
@@ -108,27 +108,27 @@ class tela(tk.Tk):
 
         self.minsize(width=SW, height=SH)
 
-    def botões(self):
+    def utilizador(self):
         self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")
-
-        if user=="-1":
-            self.butão_I=Button(self, text="criar/logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
-        else:
-            self.butão_I=Label(self, text=user, bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px")
-
+        self.butão_I=Button(self, text="criar/logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
+        self.usuario=Label(self, text="IOUAE", fg="black", bg="white", bd=3, relief="ridge")
+        
         self.butão_I.place(relx=0.925,rely=0.05)
         self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
+        self.usuario.place(relx=0.05,y=50)
+
+        self.usuario.config(text=f"usuario: {user}")
 
     def open_window(self):
         window = TelaCriação(self)
         window.grab_set()
 
     def prencher(self):
-        self.textoI=Label(self, text="IOUAE", fg="red", bg="blue")
+        
         self.escI=Entry(self, width=20, show="-")
         self.escIT=Text(self, height=4, width=45)
         
-        self.textoI.place(relx=0.05,y=50)
+        
         self.escI.place(relx=0.05,y=110)
         self.escIT.place(relx=0.05,y=135)
 
