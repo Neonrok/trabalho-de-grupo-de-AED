@@ -5,10 +5,11 @@ import os
 
 user="guest"
 
-
+#tela para logar e criar conta
 class TelaCriação(Toplevel):
-    def __init__(self, master=None):
+    def __init__(self, master=None, user_var=None):
         super().__init__(master)
+        self.user_var = user_var
         self.tela()
         self.utilizador()
         self.prencher()
@@ -67,7 +68,7 @@ class TelaCriação(Toplevel):
                 escrita = Y
                 g.write(escrita)
             user=X
-            print(user)
+            self.user_var.set(f"usuario: {user}")
             self.destroy()
 
 
@@ -78,22 +79,23 @@ class TelaCriação(Toplevel):
             global user
             messagebox.showinfo(title="^_^", message="bem-vindo")
             user=X
-            print(user)
+            self.user_var.set(f"usuario: {user}")
             self.destroy()
         else:
             messagebox.showwarning(title="erro", message="esse usuário existe, mas a palavra-passe está errada")
 
-
+#tela principal
 class tela(tk.Tk):
-    def __init__(self):
+    def __init__(self):#base para executar tudo
         super().__init__()
+        self.user_var = tk.StringVar()
 
         self.tela()
         self.utilizador()
         self.prencher()
         self.mainloop()
     
-    def tela(self):
+    def tela(self):#configotações basicas da tela
 
         self.state("zoomed")
 
@@ -108,26 +110,24 @@ class tela(tk.Tk):
 
         self.minsize(width=SW, height=SH)
 
-    def utilizador(self):
-        self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")
+    def utilizador(self):#aparecer o usuario logado
+        self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")#tenho que mover isto para uma nova def que irá ter toda a aparencia da pagina
         self.butão_I=Button(self, text="criar/logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
-        self.usuario=Label(self, text="IOUAE", fg="black", bg="white", bd=3, relief="ridge")
+        self.usuario=Label(self, text=user, fg="black", bg="white", bd=3, relief="ridge", textvariable=self.user_var)
         
         self.butão_I.place(relx=0.925,rely=0.05)
         self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
         self.usuario.place(relx=0.05,y=50)
-
-        self.usuario.config(text=f"usuario: {user}")
+        self.user_var.set(f"{user}")
 
     def open_window(self):
-        window = TelaCriação(self)
+        window = TelaCriação(self, user_var=self.user_var)
         window.grab_set()
 
     def prencher(self):
         
         self.escI=Entry(self, width=20, show="-")
         self.escIT=Text(self, height=4, width=45)
-        
         
         self.escI.place(relx=0.05,y=110)
         self.escIT.place(relx=0.05,y=135)
