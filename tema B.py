@@ -12,7 +12,7 @@ class TelaCriação(Toplevel):
         self.user_var = user_var
         self.tela()
         self.utilizador()
-        self.prencher()
+        self.social()
 
     def tela(self):
         SW = self.winfo_screenwidth()
@@ -38,7 +38,7 @@ class TelaCriação(Toplevel):
         self.butão_I.place(relx=0.05, y=160)
         self.painel.place(relx=0.02, rely=0.02, relheight=0.96, relwidth=0.96)
 
-    def prencher(self):
+    def social(self):
         self.textoI = Label(self, text="Nome", fg="black", bg="#636A72")
         self.Nome = Entry(self, width=50)
         self.textoII = Label(self, text="PasseWord", fg="black", bg="#636A72")
@@ -84,15 +84,20 @@ class TelaCriação(Toplevel):
         else:
             messagebox.showwarning(title="erro", message="esse usuário existe, mas a palavra-passe está errada")
 
+class postagem(Toplevel):
+    def __init__(self, master=None, postagem_var=None):
+        super().__init__(master)
+        self.postagem_var = postagem_var
+
 #tela principal
 class tela(tk.Tk):
     def __init__(self):#base para executar tudo
         super().__init__()
         self.user_var = tk.StringVar()
-
+        self.postagem_var = tk.StringVar()
         self.tela()
         self.utilizador()
-        self.prencher()
+        self.social()
         self.mainloop()
     
     def tela(self):#configotações basicas da tela
@@ -112,24 +117,31 @@ class tela(tk.Tk):
 
     def utilizador(self):#aparecer o usuario logado
         self.painel=PanedWindow(self, bg="#636A72", bd=3, relief="sunken")#tenho que mover isto para uma nova def que irá ter toda a aparencia da pagina
-        self.butão_I=Button(self, text="criar/logar", bg="#636A72", fg="red", font=("Helvetica 10 bold"), borderwidth="2px", command=self.open_window) 
-        self.usuario=Label(self, text=user, fg="black", bg="white", bd=3, relief="ridge", textvariable=self.user_var)
+        self.butão_I=Button(self, text="criar/logar", bg="#636A72", fg="red", font=("Helvetica 12 bold"), borderwidth="2px", command=self.open_window) 
+        self.usuario=Label(self, text=user, fg="black", bg="white", bd=3, relief="ridge", font=("Courier 12"), textvariable=self.user_var)
         
-        self.butão_I.place(relx=0.925,rely=0.05)
+        self.butão_I.place(relx=0.92,rely=0.05)
         self.painel.place(relx=0.001, rely=0.032, relheight=0.95, relwidth=0.998)
         self.usuario.place(relx=0.05,y=50)
         self.user_var.set(f"{user}")
 
     def open_window(self):
-        window = TelaCriação(self, user_var=self.user_var)
-        window.grab_set()
+        window_criar = TelaCriação(self, user_var=self.user_var)
+        window_criar.grab_set()
 
-    def prencher(self):
+    def social(self):
+        self.comonicação=Label(self, height=40, width=200)
+        self.criar=Button(self, text="postar", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.open_postar_window)
         
-        self.escI=Entry(self, width=20, show="-")
-        self.escIT=Text(self, height=4, width=45)
-        
-        self.escI.place(relx=0.05,y=110)
-        self.escIT.place(relx=0.05,y=135)
+        self.comonicação.place(relx=0.04,y=135)
+        self.criar.place(relx=0.04,y=105)
+    
+    def open_postar_window(self):
+        if user=="guest":
+            messagebox.showwarning(title="Aviso", message="Logue ou crie uma conta primeiro")
+        else:
+            window_postar = postagem(self, postagem_var=self.postagem_var)
+            window_postar.grab_set()
 
+    
 tela()
