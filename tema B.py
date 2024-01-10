@@ -1,9 +1,14 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
+from tkinter import filedialog
 import os
 
-user="guest"
+ADM=[("Cat")]
+
+user="wads"
+imagem="./base/imagens/dumy.png"
+N_Post="0"
 
 #tela para logar e criar conta
 class TelaCriação(Toplevel):
@@ -88,6 +93,92 @@ class postagem(Toplevel):
     def __init__(self, master=None, postagem_var=None):
         super().__init__(master)
         self.postagem_var = postagem_var
+        self.tela()
+        self.Titulo()
+        self.preço()
+        self.descrição()
+        self.ilustração()
+        self.postar()
+       
+
+    def tela(self):#defenir limites da tela
+        SW = self.winfo_screenwidth()
+        SH = self.winfo_screenheight()
+
+        AW = 1050
+        AH = 500
+
+        x = (SW/2) - (AW/2)
+        y = (SH/2) - (AH/2)
+
+        self.geometry(f'{AW}x{AH}+{int(x)}+{int(y)}')
+        self.title("criar")
+        self.iconbitmap("./cat-_1_.ico")
+        self.configure(bg="#636A72")
+        self.minsize(width=AW, height=AH)
+        self.maxsize(width=AW, height=AH)
+
+    def Titulo(self):
+        self.Tilt=Label(self, text="Título" ,bg="#636A72", fg="red", font=("Helvetica 12 bold"), borderwidth="2px")
+        self.Titlo=Entry(self, width=100, relief="groove")
+        self.Titlo.place(relx=0.01, y=35)
+        self.Tilt.place(relx=0.01, y=10)
+    
+    def preço(self):
+        self.texto_preço=Label(self, text="Preço" ,bg="#636A72", fg="red", font=("Helvetica 12 bold"), borderwidth="2px")
+        self.escrever_preço=Entry(self, width=100, relief="ridge")
+        self.texto_preço.place(relx=0.01, y=400)
+        self.escrever_preço.place(relx=0.01, y=420)
+
+    def descrição(self):
+        self.descricao = Text(self, width= 75, height=10)
+
+        self.descricao.place(relx=0.01, y=75)
+
+    def ilustração(self):
+        self.escolher_img=Button(self, text="escolher imagem", bg="#636A72", fg="red", font=("Helvetica 12 bold"), borderwidth="2px", command=self.escolher_imagem)
+
+        self.escolher_img.place(relx=0.01, y=350)
+    
+    def escolher_imagem(self):
+        global imagem
+        nome_img=filedialog.askopenfilename(title="qual a imagem", initialdir="C:\\Users\\rodri\\OneDrive\\Imagens", filetypes=(("png files","*png"),("gif files", "*gif"),("all files","*.*")))
+
+        imagem=PhotoImage(file=nome_img)
+
+    def postar(self):
+
+        self.but=Button(self, text="Postar", bg="#636A72", fg="red", font=("Helvetica 12 bold"), borderwidth="2px", command=self.salvar)
+
+        self.but.place(relx=0.01, y=450)
+
+    def salvar(self):
+        global N_Post, user
+
+        save_titulo = self.Titlo.get()
+        save_descrição = self.descricao.get("1.0", tk.END)
+        save_imag = str(imagem)  # Converte a imagem para string
+
+        save_preço = self.escrever_preço.get()
+
+        save = save_titulo + "\n\n" + save_descrição + "\n\n" + save_imag + "\n\n" + save_preço
+
+        print(save)
+
+        with open("./base/post_numero.txt", "r") as arquivo:
+            N_Post = int(arquivo.read().strip())
+
+        arcname = user + str(N_Post)
+
+        ficheiro = "./base/postagens/{0}.txt".format(arcname)
+
+        with open("./base/post_numero.txt", "w") as arquivo:
+            arquivo.write(str(N_Post + 1))
+
+        with open(ficheiro, "w") as g:
+            g.write(save)
+
+       
 
 #tela principal
 class tela(tk.Tk):
