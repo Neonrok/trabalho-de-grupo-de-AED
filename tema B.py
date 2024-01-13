@@ -168,7 +168,7 @@ class postagem(Toplevel):
         with open("./base/post_numero.txt", "r") as arquivo:
             N_Post = int(arquivo.read().strip())
 
-        arcname = user + str(N_Post)
+        arcname = str(N_Post) + user
 
         ficheiro = "./base/postagens/{0}.txt".format(arcname)
 
@@ -177,8 +177,6 @@ class postagem(Toplevel):
 
         with open(ficheiro, "w") as g:
             g.write(save)
-
-       
 
 #tela principal
 class tela(tk.Tk):
@@ -221,10 +219,15 @@ class tela(tk.Tk):
         window_criar.grab_set()
 
     def social(self):
-        self.comonicação=Label(self, height=40, width=200)
+
+        # Adicionar uma barra de rolagem vertical
+        self.Scrol=Scrollbar(self)
+        self.Post=Text(self, bg="#ffffff", yscrollcommand=self.Scrol.set, state='disabled')
+        self.Scrol.config(command=self.Post.yview)
+        self.Post.place(relx=0.15, rely=0.25, relheight=0.6, relwidth=0.7)
+        self.Scrol.place(relheight=0.6, relx=0.85, rely=0.25)
+        # criar postagem
         self.criar=Button(self, text="postar", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.open_postar_window)
-        
-        self.comonicação.place(relx=0.04,y=135)
         self.criar.place(relx=0.04,y=105)
     
     def open_postar_window(self):
