@@ -6,9 +6,14 @@ import os
 
 ADM=[("Cat")]
 
-user="wads"
+user="guest"
 imagem="./base/imagens/dumy.png"
 N_Post="0"
+Titulo=""
+Nome=""
+emagem=""
+preço=""
+texto=""
 
 
 class Post(Toplevel):
@@ -17,14 +22,15 @@ class Post(Toplevel):
         self.user_var = user_var
         self.variavel = variavel
         self.tela()
+        self.separação(variavel)
         self.escrita(variavel)
     
     def tela(self):
         SW = self.winfo_screenwidth()
         SH = self.winfo_screenheight()
 
-        AW = 750
-        AH = 500
+        AW = 1050
+        AH = 650
 
         x = (SW/2) - (AW/2)
         y = (SH/2) - (AH/2)
@@ -36,9 +42,47 @@ class Post(Toplevel):
         self.minsize(width=AW, height=AH)
         self.maxsize(width=AW, height=AH)
 
+    def separação(self, variavel):
+        global Titulo, Nome, emagem, preço, texto
+
+        self.caminho=str(variavel)
+
+        with open(self.caminho, 'r', encoding='utf-8') as file:
+        # Ler as primeiras cinco linhas em variáveis separadas
+            Titulo = file.readline().strip()
+            Nome = file.readline().strip()
+            emagem = file.readline().strip()
+            preço = file.readline().strip()
+            texto = file.read()
+
+
     def escrita(self, variavel):
-        self.Butter=Label(self, text= variavel)
-        self.Butter.place(x=0,y=0)
+        self.name=Label(self, text= Titulo, font=("Helvetica 12 bold"), bg="#FFFFFF", fg="red")
+        self.name.place(relx=0.01,rely=0.01)
+
+        self.autor=Label(self, text=f"autor: {Nome}", font=("Helvetica 6 bold"), bg="#FFFFFF", fg="black")
+        self.autor.place(relx=0.01, rely=0.05)
+
+        self.img=PhotoImage(file=emagem)
+        self.img_place=Label(self, image=self.img)#ajuda-------------------------------------------------------------------------------
+        self.img_place.place(relx=0.5, rely=0.09)
+
+        self.descrição=Label(self, text=texto, font=("Helvetica 7"), bg="#FFFFFF", fg="black")
+        self.descrição.place(relx=0.01, rely=0.09)
+
+        self.preso=Label(self, text=f"preço: {preço}", font=("Helvetica 8 bold"), bg="#FFFFFF", fg="black")
+        self.preso.place(relx=0.01, rely=0.81)
+
+        self.lick=Button(self, text="lick", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px" )
+        self.lick.place(relx=0.01, rely=0.9)
+
+        self.delet=Button(self, text="delete", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=delete(variavel))
+        if user == Nome or user == "Cat":
+            self.delet.place(relx=0.12, rely=0.9)
+    def delete(variavel):#ajuda---------------------------------------------
+        os.remove(variavel)
+        Post.destroy()
+
 
 #tela para logar e criar conta
 class TelaCriação(Toplevel):
@@ -129,7 +173,6 @@ class postagem(Toplevel):
         self.descrição()
         self.ilustração()
         self.postar()
-       
 
     def tela(self):#defenir limites da tela
         SW = self.winfo_screenwidth()
@@ -191,7 +234,7 @@ class postagem(Toplevel):
 
         save_preço = self.escrever_preço.get()
 
-        save = save_titulo + "\n" + save_imag + "\n" + save_preço + "\n" + save_descrição
+        save = save_titulo + "\n" + user + "\n" + save_imag + "\n" + save_preço + "\n" + save_descrição
 
         print(save)
 
@@ -273,17 +316,13 @@ class tela(tk.Tk):
         # Obter o número de arquivos
         n_arquivos = len(arquivos_na_pasta)
 
-#-----------------------------------------------------------------------------
-        # Inicializar o contador de botões
-        self.button_count = 0
-#-----------------------------------------------------------------------------
         self.on_button_click()
 
         # criar postagem
         self.criar=Button(self, text="postar", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.open_postar_window)
         self.criar.place(relx=0.04,y=105)
     
-    def on_button_click(self):
+    def on_button_click(self): #ajuda--------------------------------------------------------------------------------------------------
         arquivos_na_pasta = os.listdir("./base/postagens")
         # Acessar o conteúdo de cada arquivo
         for arquivo in arquivos_na_pasta:
@@ -291,7 +330,7 @@ class tela(tk.Tk):
             #ler a primeira linha e 
             with open(caminho_completo, 'r', encoding='utf-8') as file:
 
-                variavel = f"Variável {caminho_completo}"
+                variavel = f"{caminho_completo}"
 
                 primeira_linha = file.readline().strip()
                 new_button = tk.Button(self.inner_frame, text=primeira_linha, command=lambda v=variavel: self.executar_Post(v))
