@@ -10,6 +10,36 @@ user="wads"
 imagem="./base/imagens/dumy.png"
 N_Post="0"
 
+
+class Post(Toplevel):
+    def __init__(self, variavel, master=None, user_var=None):
+        super().__init__(master)
+        self.user_var = user_var
+        self.variavel = variavel
+        self.tela()
+        self.escrita(variavel)
+    
+    def tela(self):
+        SW = self.winfo_screenwidth()
+        SH = self.winfo_screenheight()
+
+        AW = 750
+        AH = 500
+
+        x = (SW/2) - (AW/2)
+        y = (SH/2) - (AH/2)
+
+        self.geometry(f'{AW}x{AH}+{int(x)}+{int(y)}')
+        self.title("criar")
+        self.iconbitmap("./cat-_1_.ico")
+        self.configure(bg="#636A72")
+        self.minsize(width=AW, height=AH)
+        self.maxsize(width=AW, height=AH)
+
+    def escrita(self, variavel):
+        self.Butter=Label(self, text= variavel)
+        self.Butter.place(x=0,y=0)
+
 #tela para logar e criar conta
 class TelaCriação(Toplevel):
     def __init__(self, master=None, user_var=None):
@@ -88,7 +118,7 @@ class TelaCriação(Toplevel):
             self.destroy()
         else:
             messagebox.showwarning(title="erro", message="esse usuário existe, mas a palavra-passe está errada")
-
+#tela para criar post
 class postagem(Toplevel):
     def __init__(self, master=None, postagem_var=None):
         super().__init__(master)
@@ -142,9 +172,9 @@ class postagem(Toplevel):
     
     def escolher_imagem(self):
         global imagem
-        nome_img=filedialog.askopenfilename(title="qual a imagem", initialdir="C:\\Users\\rodri\\OneDrive\\Imagens", filetypes=(("png files","*png"),("gif files", "*gif"),("all files","*.*")))
+        nome_img=filedialog.askopenfilename(title="qual a imagem", initialdir="./base/imagens", filetypes=(("png files","*png"),("gif files", "*gif"),("all files","*.*")))
 
-        imagem=PhotoImage(file=nome_img)
+        imagem=nome_img
 
     def postar(self):
 
@@ -161,7 +191,7 @@ class postagem(Toplevel):
 
         save_preço = self.escrever_preço.get()
 
-        save = save_titulo + "\n\n" + save_descrição + "\n\n" + save_imag + "\n\n" + save_preço
+        save = save_titulo + "\n" + save_imag + "\n" + save_preço + "\n" + save_descrição
 
         print(save)
 
@@ -177,6 +207,7 @@ class postagem(Toplevel):
 
         with open(ficheiro, "w") as g:
             g.write(save)
+        self.destroy()
 
 #tela principal
 class tela(tk.Tk):
@@ -226,10 +257,60 @@ class tela(tk.Tk):
         self.Scrol.config(command=self.Post.yview)
         self.Post.place(relx=0.15, rely=0.25, relheight=0.6, relwidth=0.7)
         self.Scrol.place(relheight=0.6, relx=0.85, rely=0.25)
+
+        # Criar um frame para conter os botões
+        self.inner_frame = tk.Frame(self.Post, background="#ffffff")
+
+        # Adicionar o frame no Text
+        self.Post.window_create("insert", window=self.inner_frame)
+
+        # Configurar o evento de rolagem
+        self.inner_frame.bind("<Configure>", self.configure_scroll_region)
+
+        # Listar arquivos na pasta
+        arquivos_na_pasta = os.listdir("./base/postagens")
+        
+        # Obter o número de arquivos
+        n_arquivos = len(arquivos_na_pasta)
+
+#-----------------------------------------------------------------------------
+        # Inicializar o contador de botões
+        self.button_count = 0
+#-----------------------------------------------------------------------------
+        self.on_button_click()
+
         # criar postagem
         self.criar=Button(self, text="postar", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.open_postar_window)
         self.criar.place(relx=0.04,y=105)
     
+    def on_button_click(self):
+        arquivos_na_pasta = os.listdir("./base/postagens")
+        # Acessar o conteúdo de cada arquivo
+        for arquivo in arquivos_na_pasta:
+            caminho_completo = os.path.join("./base/postagens", arquivo)
+            #ler a primeira linha e 
+            with open(caminho_completo, 'r', encoding='utf-8') as file:
+
+                variavel = f"Variável {caminho_completo}"
+
+                primeira_linha = file.readline().strip()
+                new_button = tk.Button(self.inner_frame, text=primeira_linha, command=lambda v=variavel: self.executar_Post(v))
+                new_button.pack(pady=5)
+                self.update_idletasks()  # Atualizar a região de rolagem
+
+    #area de rolagem
+    def configure_scroll_region(self, event):
+        try:
+            self.Post.configure(scrollregion=self.Post.bbox("all"))
+        except tk.TclError:
+            #caso não tenha items
+            pass
+    
+    def executar_Post(self, variavel):
+        # Instanciar a classe e executar com a variável do botão
+        Post(variavel)
+
+
     def open_postar_window(self):
         if user=="guest":
             messagebox.showwarning(title="Aviso", message="Logue ou crie uma conta primeiro")
