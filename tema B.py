@@ -64,7 +64,12 @@ class Post(Toplevel):
         self.autor.place(relx=0.01, rely=0.05)
 
         self.img=PhotoImage(file=emagem)
-        self.img_place=Label(self, image=self.img)#ajuda-------------------------------------------------------------------------------
+
+        largura = 200
+        altura = 150
+        
+        self.img_red = self.img.subsample(int(self.img.width() / largura),int(self.img.height() / altura))
+        self.img_place=Label(self, image=self.img_red)#ajuda-------------------------------------------------------------------------------
         self.img_place.place(relx=0.5, rely=0.09)
 
         self.descrição=Label(self, text=texto, font=("Helvetica 7"), bg="#FFFFFF", fg="black")
