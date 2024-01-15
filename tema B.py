@@ -17,10 +17,11 @@ texto=""
 
 
 class Post(Toplevel):
-    def __init__(self, variavel, master=None, user_var=None):
+    def __init__(self, variavel, tela=None, master=None, user_var=None):
         super().__init__(master)
         self.user_var = user_var
         self.variavel = variavel
+        self.tela_1 = tela
         self.tela()
         self.separação()
         self.escrita()
@@ -55,7 +56,6 @@ class Post(Toplevel):
             preço = file.readline().strip()
             texto = file.read()
 
-
     def escrita(self):
         self.name=Label(self, text= Titulo, font=("Helvetica 12 bold"), bg="#FFFFFF", fg="red")
         self.name.place(relx=0.01,rely=0.01)
@@ -81,6 +81,7 @@ class Post(Toplevel):
             self.delet.place(relx=0.12, rely=0.9)
     def delete(self):
         os.remove(self.variavel)
+        self.tela_1.atualizar_postagens()
         self.destroy()
 
 
@@ -253,7 +254,7 @@ class postagem(Toplevel):
         with open(ficheiro, "w") as g:
             g.write(save)
 
-        self.tela_1.on_button_click()
+        self.tela_1.atualizar_postagens()
 
         self.destroy()
         
@@ -322,14 +323,17 @@ class tela(tk.Tk):
         # Obter o número de arquivos
         n_arquivos = len(arquivos_na_pasta)
 
-        self.on_button_click()
+        self.atualizar_postagens()
 
         # criar postagem
         self.criar=Button(self, text="postar", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.open_postar_window)
         self.criar.place(relx=0.04,y=105)
     
-    def on_button_click(self): #ajuda--------------------------------------------------------------------------------------------------
-        print("on_button-click")
+    def atualizar_postagens(self): #ajuda--------------------------------------------------------------------------------------------------
+        #destroir
+        for widget in self.inner_frame.winfo_children():
+            widget.destroy()
+        
         arquivos_na_pasta = os.listdir("./base/postagens")
         # Acessar o conteúdo de cada arquivo
         for arquivo in arquivos_na_pasta:
@@ -354,7 +358,7 @@ class tela(tk.Tk):
     
     def executar_Post(self, variavel):
         # Instanciar a classe e executar com a variável do botão
-        Post(variavel)
+        Post(variavel, tela=self)
 
 
     def open_postar_window(self):
