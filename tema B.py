@@ -6,7 +6,7 @@ import os
 
 ADM=[("Cat")]
 
-user="guest"
+user="wads"
 imagem="./base/imagens/dumy.png"
 N_Post="0"
 Titulo=""
@@ -22,8 +22,8 @@ class Post(Toplevel):
         self.user_var = user_var
         self.variavel = variavel
         self.tela()
-        self.separação(variavel)
-        self.escrita(variavel)
+        self.separação()
+        self.escrita()
     
     def tela(self):
         SW = self.winfo_screenwidth()
@@ -42,10 +42,10 @@ class Post(Toplevel):
         self.minsize(width=AW, height=AH)
         self.maxsize(width=AW, height=AH)
 
-    def separação(self, variavel):
+    def separação(self):
         global Titulo, Nome, emagem, preço, texto
 
-        self.caminho=str(variavel)
+        self.caminho=str(self.variavel)
 
         with open(self.caminho, 'r', encoding='utf-8') as file:
         # Ler as primeiras cinco linhas em variáveis separadas
@@ -56,7 +56,7 @@ class Post(Toplevel):
             texto = file.read()
 
 
-    def escrita(self, variavel):
+    def escrita(self):
         self.name=Label(self, text= Titulo, font=("Helvetica 12 bold"), bg="#FFFFFF", fg="red")
         self.name.place(relx=0.01,rely=0.01)
 
@@ -76,12 +76,12 @@ class Post(Toplevel):
         self.lick=Button(self, text="lick", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px" )
         self.lick.place(relx=0.01, rely=0.9)
 
-        self.delet=Button(self, text="delete", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=delete(variavel))
+        self.delet=Button(self, text="delete", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.delete)
         if user == Nome or user == "Cat":
             self.delet.place(relx=0.12, rely=0.9)
-    def delete(variavel):#ajuda---------------------------------------------
-        os.remove(variavel)
-        Post.destroy()
+    def delete(self):
+        os.remove(self.variavel)
+        self.destroy()
 
 
 #tela para logar e criar conta
@@ -164,8 +164,9 @@ class TelaCriação(Toplevel):
             messagebox.showwarning(title="erro", message="esse usuário existe, mas a palavra-passe está errada")
 #tela para criar post
 class postagem(Toplevel):
-    def __init__(self, master=None, postagem_var=None):
+    def __init__(self, master=None, tela=None, postagem_var=None):
         super().__init__(master)
+        self.tela_1 = tela
         self.postagem_var = postagem_var
         self.tela()
         self.Titulo()
@@ -220,12 +221,13 @@ class postagem(Toplevel):
         imagem=nome_img
 
     def postar(self):
-
+        print("postar")
         self.but=Button(self, text="Postar", bg="#636A72", fg="red", font=("Helvetica 12 bold"), borderwidth="2px", command=self.salvar)
 
         self.but.place(relx=0.01, y=450)
 
     def salvar(self):
+        print("salvar")
         global N_Post, user
 
         save_titulo = self.Titlo.get()
@@ -250,7 +252,11 @@ class postagem(Toplevel):
 
         with open(ficheiro, "w") as g:
             g.write(save)
+
+        self.tela_1.on_button_click()
+
         self.destroy()
+        
 
 #tela principal
 class tela(tk.Tk):
@@ -323,6 +329,7 @@ class tela(tk.Tk):
         self.criar.place(relx=0.04,y=105)
     
     def on_button_click(self): #ajuda--------------------------------------------------------------------------------------------------
+        print("on_button-click")
         arquivos_na_pasta = os.listdir("./base/postagens")
         # Acessar o conteúdo de cada arquivo
         for arquivo in arquivos_na_pasta:
@@ -354,7 +361,7 @@ class tela(tk.Tk):
         if user=="guest":
             messagebox.showwarning(title="Aviso", message="Logue ou crie uma conta primeiro")
         else:
-            window_postar = postagem(self, postagem_var=self.postagem_var)
+            window_postar = postagem(self, tela=self, postagem_var=self.postagem_var)
             window_postar.grab_set()
 
     
