@@ -65,7 +65,10 @@ class Post(Toplevel):
         self.autor=Label(self, text=f"autor: {Nome}", font=("Helvetica 6 bold"), bg="#FFFFFF", fg="black")
         self.autor.place(relx=0.01, rely=0.05)
 
-        self.img=PhotoImage(file=emagem)
+        try:
+            self.img=PhotoImage(file=emagem)
+        except Exception as e:
+            self.img=imagem
 
         largura = 200
         altura = 150
