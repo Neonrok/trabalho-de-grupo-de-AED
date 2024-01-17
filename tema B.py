@@ -308,7 +308,7 @@ class postagem(Toplevel):
         with open("./base/post_numero.txt", "r") as arquivo:
             N_Post = int(arquivo.read().strip())
 
-        arcname = str(N_Post) + user
+        arcname = str(N_Post) + user + str(N_Post)
 
         ficheiro = "./base/postagens/{0}.txt".format(arcname)
 
@@ -434,6 +434,5 @@ class tela(tk.Tk):
         else:
             window_postar = postagem(self, tela=self, postagem_var=self.postagem_var)
             window_postar.grab_set()
-
-    
+ 
 tela()
