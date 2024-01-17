@@ -95,9 +95,10 @@ class Post(Toplevel):
         self.TelComents=Text(self, width=35, height=32)
         self.TelComents.place(relx=0.72, rely=0.05)
         self.coment=Entry(self, width=35)
-        self.coment.place(relx=0.74,rely=0.85)
         self.confirm=Button(self, text="coment", bg="#636C75", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px", relief="groove", command=self.comentar)
-        self.confirm.place(relx=0.74,rely=0.89)
+        if user!="guest":
+            self.coment.place(relx=0.74,rely=0.85)
+            self.confirm.place(relx=0.74,rely=0.89)
 
     def delete(self):
         os.remove(self.variavel)
