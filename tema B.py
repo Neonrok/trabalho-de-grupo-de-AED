@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 import os
-
+#variaveis globais usadas
 user="guest"
 imagem="./base/imagens/dumy.png"
 N_Post="0"
@@ -13,7 +13,7 @@ emagem=""
 preço=""
 texto=""
 likes=""
-
+#ver o post
 class Post(Toplevel):
     def __init__(self, variavel, tela=None, master=None, user_var=None):
         super().__init__(master)
@@ -146,9 +146,6 @@ class Post(Toplevel):
                 print(coment)
                 self.TelComents.insert("1.0", coment)
         self.TelComents.config(state="disabled")
-
-
-
 #tela para logar e criar conta
 class TelaCriação(Toplevel):
     def __init__(self, master=None, user_var=None):
@@ -322,9 +319,7 @@ class postagem(Toplevel):
 
         self.tela_1.atualizar_postagens()
 
-        self.destroy()
-        
-
+        self.destroy()     
 #tela principal
 class tela(tk.Tk):
     def __init__(self):#base para executar tudo
@@ -395,7 +390,7 @@ class tela(tk.Tk):
         self.criar=Button(self, text="postar", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.open_postar_window)
         self.criar.place(relx=0.04,y=105)
     
-    def atualizar_postagens(self): #ajuda--------------------------------------------------------------------------------------------------
+    def atualizar_postagens(self): 
         #destroir
         for widget in self.inner_frame.winfo_children():
             widget.destroy()
@@ -427,12 +422,11 @@ class tela(tk.Tk):
         # Instanciar a classe e executar com a variável do botão
         Post(variavel, tela=self)
 
-
     def open_postar_window(self):
         if user=="guest":
             messagebox.showwarning(title="Aviso", message="Logue ou crie uma conta primeiro")
         else:
             window_postar = postagem(self, tela=self, postagem_var=self.postagem_var)
             window_postar.grab_set()
- 
+#iniciar programa
 tela()
