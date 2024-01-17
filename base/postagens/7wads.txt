@@ -1,5 +1,0 @@
-wads
-wads
-./base/imagens/dumy.png
-a
-a

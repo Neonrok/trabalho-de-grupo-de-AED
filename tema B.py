@@ -4,9 +4,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 import os
 
-ADM=[("Cat")]
-
-user="wads"
+user="guest"
 imagem="./base/imagens/dumy.png"
 N_Post="0"
 Titulo=""
@@ -14,7 +12,7 @@ Nome=""
 emagem=""
 preço=""
 texto=""
-
+likes=""
 
 class Post(Toplevel):
     def __init__(self, variavel, tela=None, master=None, user_var=None):
@@ -25,6 +23,8 @@ class Post(Toplevel):
         self.tela()
         self.separação()
         self.escrita()
+        self.liks_cont()
+        self.ler_comentar()
     
     def tela(self):
         SW = self.winfo_screenwidth()
@@ -57,6 +57,8 @@ class Post(Toplevel):
             texto = file.read()
 
     def escrita(self):
+
+
         self.name=Label(self, text= Titulo, font=("Helvetica 12 bold"), bg="#FFFFFF", fg="red")
         self.name.place(relx=0.01,rely=0.01)
 
@@ -78,16 +80,69 @@ class Post(Toplevel):
         self.preso=Label(self, text=f"preço: {preço}", font=("Helvetica 8 bold"), bg="#FFFFFF", fg="black")
         self.preso.place(relx=0.01, rely=0.81)
 
-        self.lick=Button(self, text="lick", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px" )
+        self.lick=Button(self, text="like", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.liks)
         self.lick.place(relx=0.01, rely=0.9)
+        self.like=Label(self, text=likes, bg="#ffffff")
+        self.like.place(relx=0.06, rely=0.9)
 
         self.delet=Button(self, text="delete", bg="#636A72", fg="red", font=("Helvetica 9 bold"), borderwidth="2px", command=self.delete)
         if user == Nome or user == "Cat":
             self.delet.place(relx=0.12, rely=0.9)
+
+        self.TelComents=Text(self, width=35, height=32)
+        self.TelComents.place(relx=0.72, rely=0.05)
+        self.coment=Entry(self, width=35)
+        self.coment.place(relx=0.74,rely=0.85)
+        self.confirm=Button(self, text="coment", bg="#636C75", fg="blue", font=("Helvetica 9 bold"), borderwidth="2px", relief="groove", command=self.comentar)
+        self.confirm.place(relx=0.74,rely=0.89)
+
     def delete(self):
         os.remove(self.variavel)
         self.tela_1.atualizar_postagens()
         self.destroy()
+
+    def liks(self):
+        global likes
+        if user!="guest":
+            if os.path.exists("{0}-likes/{1}".format(self.variavel.rstrip(".txt"),user))==True:
+                os.remove("{0}-likes/{1}".format(self.variavel.rstrip(".txt"),user))
+
+            else:
+                with open("{0}-likes/{1}".format(self.variavel.rstrip(".txt"),user),"w") as file:
+                    file.write("-")
+
+        else:
+            messagebox.showwarning("inicie a conta", "entre em uma conta")
+
+        self.liks_cont()
+    def liks_cont(self):
+        like=os.listdir("{0}-likes".format(self.variavel.rstrip(".txt")))
+
+        likes=str(len(like))
+        self.like.config(text=likes)
+    
+    def comentar(self):
+        comentario=str(self.coment.get())
+        ordem=len(os.listdir("{0}-respostas".format(self.variavel.rstrip(".txt"))))
+        with open("{0}-respostas/{1}".format(self.variavel.rstrip(".txt"),ordem),"w") as file:
+            file.write(comentario)
+            self.coment.delete(0, 'end')
+        self.ler_comentar()
+
+    def ler_comentar(self):
+
+        self.TelComents.config(state="normal")
+        self.TelComents.delete("1.0", 'end')
+        posts = os.listdir("{0}-respostas".format(self.variavel.rstrip(".txt")))
+
+        for i in range(len(posts)):
+            with open("{0}-respostas/{1}".format(self.variavel.rstrip(".txt"),posts[i]),"r") as file:
+                coment = file.readline().strip()
+                coment=str(coment) + "\n"
+                print(coment)
+                self.TelComents.insert("1.0", coment)
+        self.TelComents.config(state="disabled")
+
 
 
 #tela para logar e criar conta
@@ -258,6 +313,8 @@ class postagem(Toplevel):
 
         with open(ficheiro, "w") as g:
             g.write(save)
+            os.makedirs("./base/postagens/{0}-likes".format(arcname))
+            os.makedirs("./base/postagens/{0}-respostas".format(arcname))
 
         self.tela_1.atualizar_postagens()
 
@@ -344,14 +401,15 @@ class tela(tk.Tk):
         for arquivo in arquivos_na_pasta:
             caminho_completo = os.path.join("./base/postagens", arquivo)
             #ler a primeira linha e 
-            with open(caminho_completo, 'r', encoding='utf-8') as file:
+            if os.path.isfile(caminho_completo):
+                with open(caminho_completo, 'r', encoding='utf-8') as file:
 
-                variavel = f"{caminho_completo}"
+                    variavel = f"{caminho_completo}"
 
-                primeira_linha = file.readline().strip()
-                new_button = tk.Button(self.inner_frame, text=primeira_linha, command=lambda v=variavel: self.executar_Post(v))
-                new_button.pack(pady=5)
-                self.update_idletasks()  # Atualizar a região de rolagem
+                    primeira_linha = file.readline().strip()
+                    new_button = tk.Button(self.inner_frame, text=primeira_linha, command=lambda v=variavel: self.executar_Post(v))
+                    new_button.pack(pady=5)
+                    self.update_idletasks()  # Atualizar a região de rolagem
 
     #area de rolagem
     def configure_scroll_region(self, event):

@@ -2,4 +2,4 @@ TxT
 wads
 C:/Base/repositorios/trabalho-de-grupo-de-AED/base/imagens/dumy.png
 12
-TptO
+este é o primeiro comentario que funciona estou muito feliz^_^
